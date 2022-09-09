@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Book Detail Page
+{% endblock title %}
+
+{% block content %}
+    <div class="row mb-4">
+        <div class="col-2">
+            <img class="cover-picture" src="{{book.cover_picture.url}}"  alt="Cover image">
+        </div>
+        <div class="col-6 ms-2">
+            <h3>{{book.title}}</h3>
+            <span class="fst-italic">
+            {% for book_author in book.bookauthor_set.all %}
+            Authored by
+            
+            {% if forloop.last %}
+            {{book_author.author.full_name}}
+            {% else %}
+            {{book_author.author.full_name}},
+            {% endif %}
+                
+            
+            {% endfor %}
+                </span>
+    <p>{{book.description}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <form action="{% url 'reviews' book.id %}" method="post">
+                {% csrf_token %}
+                {{review_form | crispy}}
+                <button class="btn btn-success">Add review</button>
+            </form>
+            
+        </div>
+    </div>
+    {% if book.bookreview_set.exists %}
+    <h4>Reviews</h4>
+        <div class="row">
+            <div class="col-7">
+
+                {% for review in book.bookreview_set.all %}
+                <div class="col-2">
+                    <img class="small-profile-pic" src="{{review.user.profile_picture.url}}" alt="">
+                </div>
+                <b>{{review.user.username}}</b> rated it {{review.stars_given}} <span class="fw-lighter">{{review.created_at}}</span>
+                
+                {% if review.user == request.user %}
+                <a href="{% url 'edit-review' book.id review.id %}"><i class="bi bi-pen"></i></a>
+                <a href="{% url 'confirm-delete-review' book.id review.id %}"><i class="bi bi-trash"></i></a>
+                {% endif %}
+                <p class="mt-2 font-monospace fs-7">{{review.comment}}</p>
+                
+            {% endfor %}
+            </div>
+
+        </div>
+        {% endif %}
+      
+            
+    <hr>
+
+{% endblock content %}

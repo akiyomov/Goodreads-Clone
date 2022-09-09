@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Books page
+{% endblock title %}
+
+{% block content %}
+<h1>
+    Books
+</h1>
+    <div class="row mb-3">
+        <div class="col ">
+            <form class="d-flex" action="" method="get">
+                <input name="q" class=" me-2 form-control" type="search" id="" placeholder="Search" value="{{search_query}}">
+
+
+                <button class="btn btn-success" >Search</button>
+            </form>
+        </div>
+    </div>
+
+
+{% if page_obj %}
+
+    {% for book in page_obj %}
+    <div class="row mb-4">
+            <div class="col-2">
+                <img src="{{book.cover_picture.url}}" class="cover-picture" alt="Cover Picture">
+            </div>
+            <div class="col-6">
+                <a href="{% url 'detail' book.id %}">{{book.title}}</a>
+                <p>{{book.description}}</p>
+            </div>
+        </div>
+    {% endfor %}
+
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+          <li class="page-item"><a class="page-link" href="{% url 'list' %}?page=1">&laquo; first</a></li>
+          <li class="page-item"><a class="page-link" href="{% url 'list' %}?page={{page_obj.previous_page_number}}">Previous</a></li>
+            {% endif %}
+          <li class="page-item active"><a class="page-link" href="#">{{page_obj.number}}</a></li>
+            
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="{% url 'list' %}?page={{page_obj.next_page_number}}">Next</a></li>
+            <li class="page-item"><a class="page-link" href="{% url 'list' %}?page={{page_obj.paginator.num_pages}}">Last &raquo;</a></li>
+        </ul>
+      </nav>
+
+      {% endif %}
+    <!-- {% if page_obj.has_previous %}
+    <a href="{% url 'list' %}?page={{page_obj.previous_page_number}}">Previous</a>
+    {% endif %}
+    {{page_obj.number}}
+    {% if page_obj.has_next %}
+        <a href="{% url 'list' %}?page={{page_obj.next_page_number}}">Next</a>
+
+    <!-- {% endif %} --> 
+
+{% else %}
+No books found.
+{% endif %}
+    
+{% endblock content %}
