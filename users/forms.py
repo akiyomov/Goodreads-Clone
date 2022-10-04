@@ -19,10 +19,11 @@ class UserCreateForm(forms.ModelForm):
         if user.email:
             send_mail(
             'Welcome to goodreads clone',
-            f'Hi {user.username}, we are happy to ann ounce our website is good enough',
+            f'Hi {user.username}, we are happy to announce our website is good enough',
             'adam.lion077@gmail.com',
             [user.email],
             fail_silently=False
+            
 
             )
         return user

@@ -99,7 +99,7 @@ class ProfileUpdateView(LoginRequiredMixin,View):
 
             return redirect('users:profile')
 
-        else:
-            return render(request,'users/profile-edit.html',{"form":user_update_form})
+        
+        return render(request,'users/profile-edit.html',{"form":user_update_form})
 
 
